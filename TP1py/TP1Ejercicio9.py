@@ -8,8 +8,8 @@ c = 1664525
 padrones = [93272, 92028, 79979, 96749]
 x0 = int(sum(padrones)/len(padrones))
 
-class GCL_01():
 
+class GCL_01():
     """Generador Lineal Congruente con distribucion [0, 1]
     atributos:
      m: el modulo
@@ -47,30 +47,29 @@ for i in range(tam_muestra):
     elif u > 0.9 and u <= 1:
         muestra.append(4)
 
-	
 
-#cuento las apariciones
+# cuento las apariciones
 obs_values = [0 for i in range(4)]
 for i in muestra:
-	obs_values[i-1] += 1
+    obs_values[i-1] += 1
+
+print('observaciones:', obs_values)
 
 
 expected_p_values = [0.1, 0.5, 0.3, 0.1]
 expected_values = [100000*i for i in expected_p_values]
 
+print('esperados:', expected_values)
+
 
 statistic, pvalue = sp.chisquare(obs_values, f_exp=expected_values)
-
 print(statistic, pvalue)
 
 
-#si pvalue <= alfa entonces rechazo H0 (digo que son distintas)
-
-if pvalue <= 0.01:
-	print("las distribuciones NO son las mismas con nivel de significación de 0.01")
-
+if 1 - pvalue <= 0.01:
+    print("Las distribuciones son las mismas con nivel de significación de 0.01")
 else:
-	if pvalue <= 0.05:
-		print("las distribuciones NO son las mismas con nivel de significación de 0.05")
-	else:
-		print("las distribuciones coinciden")
+    if 1 - pvalue <= 0.05:
+        print("las distribuciones son las mismas con nivel de significación de 0.05")
+    else:
+        print("las distribuciones no coinciden para los niveles de significancia dados")
