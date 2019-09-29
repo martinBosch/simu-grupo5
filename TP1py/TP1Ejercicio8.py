@@ -1,8 +1,5 @@
-
-
 from matplotlib import pyplot as plt
 import scipy.stats as stats
-
 
 
 class GCL:
@@ -45,70 +42,67 @@ def generar_secuencia(secuencia_largo):
 
     return secuencia
 
-tam_muestra = 10000
+
+tam_muestra = 100000
+muestras = generar_secuencia(tam_muestra)
 
 
-
-a,b = 0.3,0.6
+alfa, beta = 0.3, 0.6
 
 #calculo las probabilidades, corto cuando ya no distingo diferencia
-probs = [b-a]
+esperados = [beta - alfa]
 termino = False
 i = 1
 while not termino:
-	nuevaProb = probs[0] * ((1-probs[0]) ** i)
+    nuevaProb = esperados[0] * ((1 - esperados[0]) ** i)
 
-	if nuevaProb == probs[i-1]:
-		termino = True
+    if nuevaProb == esperados[i - 1]:
+        termino = True
+    else:
+        esperados.append(nuevaProb)
+        i += 1
 
-	else:
-		probs.append(nuevaProb)
-		i += 1
 
-
-muestras = generar_secuencia(tam_muestra)
-#calculo cantidad de veces que cai 0 afuera, 1 afuera, 2 afuera...
+# calculo cantidad de veces que cai 0 afuera, 1 afuera, 2 afuera...
 primero = True
-contador_local = 0
-numeros = {}
+contador_veces_cae_afuera = 0
+veces_cae_afuera = {}
 for x in muestras:
-	if (x>=a and x<=b and primero):
-		primero = False
-	if (x>=a and x<=b and not primero):
-		veces = numeros.get(contador_local,0)
-		numeros[contador_local] = veces + 1
-		contador_local = 0
-	if ((x<a or x>b) and not primero):
-		contador_local+=1
+    if (x >= alfa and x <= beta) and primero:
+        primero = False
+    if (x >= alfa and x <= beta) and not primero:
+        veces = veces_cae_afuera.get(contador_veces_cae_afuera, 0)
+        veces_cae_afuera[contador_veces_cae_afuera] = veces + 1
+        contador_veces_cae_afuera = 0
+    if (x < alfa or x > beta) and not primero:
+        contador_veces_cae_afuera += 1
 
 
-#ajusto para que sean frecuencias
-total = sum(numeros.values())
-for k in numeros.keys():
-	numeros[k] /= total
+# ajusto para que sean frecuencias
+total = sum(veces_cae_afuera.values())
+for k in veces_cae_afuera.keys():
+    veces_cae_afuera[k] /= total
 
-#lo paso a lista y relleno con 0 donde no tuve apariciones
-lista = []
-for i in range(2084):
-	lista.append(numeros.get(i,0))
 
-Dsquared, p = stats.chisquare(lista, f_exp=probs)
+# lo paso a lista y relleno con 0 donde no tuve apariciones
+observados = []
+for i in range(len(esperados)):
+    observados.append(veces_cae_afuera.get(i, 0))
 
-t = stats.chi2.ppf(q=0.99, df=10)
 
-print ("Aplicamos test chi cuadrado a los resultados de test gap.")
-print ("t: " + str(t))
-print ("D^2 : " + str(Dsquared))
+Dsquared, p = stats.chisquare(observados, esperados)
+print('Dsquared:', Dsquared)
+print('1 - p:', p)
 
-if (Dsquared < t):
-	print("ACEPTAMOS la hipotesis con un error del 1% para el gap test con intervalo [{0}, {1}].".format(a, b))
+
+if 1 - p < 0.01:
+    print("Las distribuciones son las mismas con un error del 1%, es decir, el generador GCL pasa el gap test"
+          " con un nivel de significancia del 1%")
 else:
-	print("RECHAZAMOS la hipotesis con un error del 1% para el gap test con intervalo [{0}, {1}].".format(a, b))
-	t = stats.chi2.ppf(q=0.95, df=10)
-	print ("Aplicamos test chi cuadrado a los resultados de test gap.")
-	print ("t: " + str(t))
-	print ("D^2 : " + str(Dsquared))
-	if (Dsquared < t):
-		print("ACEPTAMOS la hipotesis con un error del 5% para el gap test con intervalo [{0}, {1}].".format(a, b))
-	else:
-		print("RECHAZAMOS la hipotesis con un error del 5% para el gap test con intervalo [{0}, {1}].".format(a, b))
+    print("El generador GCL no pasa el gap test con un nivel de significancia del 1%")
+    print("Probamos para un nivel de significancia del 5%")
+    if 1 - p < 0.05:
+        print("Las distribuciones son las mismas con un error del 5%, es decir, el generador GCL pasa el gap test"
+              " con un nivel de significancia del 5%")
+    else:
+        print("El generador GCL no pasa el gap test con un nivel de significancia del 5%")
