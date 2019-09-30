@@ -48,12 +48,18 @@ for i in range(tam_muestra):
         muestra.append(4)
 
 
+my_rolls_expected = [30, 60, 10]
+my_rolls_actual = [50, 45, 5]
+print( sp.chisquare(my_rolls_actual, my_rolls_expected) )
+print('1%:', sp.chi2.ppf(q=0.99, df=2) )
+print('5%:', sp.chi2.ppf(q=0.95, df=2) )
+
 # cuento las apariciones
 obs_values = [0 for i in range(4)]
 for i in muestra:
     obs_values[i-1] += 1
 
-print('observaciones:', obs_values)
+print('observados:', obs_values)
 
 
 expected_p_values = [0.1, 0.5, 0.3, 0.1]
@@ -62,14 +68,20 @@ expected_values = [100000*i for i in expected_p_values]
 print('esperados:', expected_values)
 
 
-statistic, pvalue = sp.chisquare(obs_values, f_exp=expected_values)
-print(statistic, pvalue)
+print('Aplicamos el test chi2 tomando como H0 que los valores observados en la muestra del ejer 6 siguen la'
+      ' distribucion empirica dada.'
+      ' Si p < nivel_significancia rechazamos H0 con un error del 1% o %5')
+
+D2, p = sp.chisquare(obs_values, f_exp=expected_values)
+print('D^2:', D2, 'p:', p)
 
 
-if 1 - pvalue <= 0.01:
-    print("Las distribuciones son las mismas con nivel de significación de 0.01")
-else:
-    if 1 - pvalue <= 0.05:
-        print("las distribuciones son las mismas con nivel de significación de 0.05")
+if p < 0.05:
+    print("Rechazamos H0 con un error del 5%: los valores de la muestra NO siguen la distribucion empirica dada")
+    print("Ahora probamos si con menos error podemos llegar a aceptar H0")
+    if p < 0.01:
+        print("Rechazamos H0 con un error del 1%: los valores de la muestra NO siguen la distribucion empirica dada")
     else:
-        print("las distribuciones no coinciden para los niveles de significancia dados")
+        print("Aceptamos H0 con un error del 1%: los valores de la muestra siguen la distribucion empirica dada")
+else:
+    print("Aceptamos H0 con un error del 5%: los valores de la muestra siguen la distribucion empirica dada")

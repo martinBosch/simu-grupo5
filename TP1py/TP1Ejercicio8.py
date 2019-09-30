@@ -90,19 +90,20 @@ for i in range(len(esperados)):
     observados.append(veces_cae_afuera.get(i, 0))
 
 
+print('Aplicamos el test chi2 tomando como H0 que los valores observados del gap test siguen una distribucion geometrica.'
+      ' Si p < nivel_significancia rechazamos H0 con un error del 1% o %5')
+
 Dsquared, p = stats.chisquare(observados, esperados)
-print('Dsquared:', Dsquared)
-print('1 - p:', p)
+print('D^2:', Dsquared)
+print('p:', p)
 
 
-if 1 - p < 0.01:
-    print("Las distribuciones son las mismas con un error del 1%, es decir, el generador GCL pasa el gap test"
-          " con un nivel de significancia del 1%")
-else:
-    print("El generador GCL no pasa el gap test con un nivel de significancia del 1%")
-    print("Probamos para un nivel de significancia del 5%")
-    if 1 - p < 0.05:
-        print("Las distribuciones son las mismas con un error del 5%, es decir, el generador GCL pasa el gap test"
-              " con un nivel de significancia del 5%")
+if p < 0.05:
+    print("Rechazamos H0 con un error del 5%: los valores del gap test NO siguen una distribucion geometrica")
+    print("Ahora probamos si con menos error podemos llegar a aceptar H0")
+    if p < 0.01:
+        print("Rechazamos H0 con un error del 1%: los valores del gap test NO siguen una distribucion geometrica")
     else:
-        print("El generador GCL no pasa el gap test con un nivel de significancia del 5%")
+        print("Aceptamos H0 con un error del 1%: los valores del gap test siguen una distribucion geometrica")
+else:
+    print("Aceptamos H0 con un error del 5%: los valores del gap test siguen una distribucion geometrica")
