@@ -7,14 +7,16 @@
 
 #Ejercicio 3
 from matplotlib import pyplot as plt
-import random
-import math
+from random import random
 import numpy as np
 from math import exp
+from scipy.stats import norm
+
 
 #Tamaño gráficos
 plt.style.use('default')
 plt.rcParams['figure.figsize'] = (15, 10)
+
 
 '''
 Para el metodo de aceptacion y rechazo se debe usar una fY() conocida que tenga el mismo dominio que la fX() que se quiere generar.
@@ -24,24 +26,29 @@ siendo que X sigue una distribucion N() y Z una N(0, 1). Como nosotros queremos 
 X = Z*desvío + mu
 '''
 
+
 # con 0 < t < infinito (por eso el 2 en el numerador)
 def normal_estandar(t):
     return 2/(np.sqrt(2 * np.pi)) * np.exp( -1*(t)**2 / 2 )
 
+
 x = np.arange(0, 10, 0.1)
 y = np.array(list(map(normal_estandar, x)))
-
+plt.title('Normal estandar')
 plt.plot(x, y)
 plt.show()
+
 
 def exponencial(t, media=1):
     return media * exp(-1*media*t)
 
+
 x = np.arange(0, 10, 0.1)
 y = np.array(list(map(exponencial, x)))
-
+plt.title('Exponencial de media 1')
 plt.plot(x, y)
 plt.show()
+
 
 # comparo la distribucion normal estandar y la exponencial de media 1
 x1 = np.arange(0, 10, 0.1)
@@ -51,10 +58,10 @@ y2 = np.array(list(map(exponencial, x1)))
 
 plt.plot(x1, y1, label='fx')
 plt.plot(x1, y2, label='fy')
+plt.title('Comparación normal estandar y exponencial de media 1')
 plt.legend()
 plt.show()
 
-from random import random
 
 media, desvio_estandar = 15, 3
 tam_muestra = 100000
@@ -67,7 +74,7 @@ for i in range(tam_muestra):
     u1 = np.random.exponential(1, 1)[0]
     u2 = random()
 
-    if( u2 < normal_estandar(u1)/(c*exponencial(u1, media=1)) ):
+    if u2 < normal_estandar(u1)/(c*exponencial(u1, media=1)):
         # u3 para decidir si el valor es negativo o positivo
         u3 = random()
         if u3 <= 0.5:
@@ -83,10 +90,8 @@ for i in range(tam_muestra):
 plt.hist(muestra, 100)
 plt.show()
 
-from scipy.stats import norm
 
 x = np.arange(0, 30, 0.1)
-
 plt.plot(x, norm.pdf(x, media, desvio_estandar), color='r')
 plt.hist(muestra, 100, density=True)
 plt.show()
