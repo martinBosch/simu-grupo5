@@ -1,10 +1,17 @@
+#75.26 Simulación - TP1
+#Grupo 5
+#79979 – González, Juan Manuel (juanmg0511@gmail.com)<br />
+#92028 – Tusca, Bautista (bautista.tusca@gmail.com)<br />
+#93272 – Zapico, Rodrigo (rodri.zapico@gmail.com)<br />
+#96749 – Bosch, Martín (martinbosch17@gmail.com)
 
-
+#Ejercicio 7
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-
-
+#Tamaño gráficos
+plt.style.use('default')
+plt.rcParams['figure.figsize'] = (15, 10)
 
 class GCL:
     """Generador Lineal Congruente
@@ -26,15 +33,12 @@ class GCL:
         self.xn = (self.a * self.xn + self.c) % self.m
         return self.xn
 
-
-
 m = 2**32
 a = 1013904223
 c = 1664525
 
 padrones = [93272, 92028, 79979, 96749]
 x0 = int(sum(padrones)/len(padrones))
-
 
 def generar_secuencia(secuencia_largo):
     gcl = GCL(m, a, c, x0)

@@ -1,8 +1,20 @@
+#75.26 Simulación - TP1
+#Grupo 5
+#79979 – González, Juan Manuel (juanmg0511@gmail.com)<br />
+#92028 – Tusca, Bautista (bautista.tusca@gmail.com)<br />
+#93272 – Zapico, Rodrigo (rodri.zapico@gmail.com)<br />
+#96749 – Bosch, Martín (martinbosch17@gmail.com)
+
+#Ejercicio 3
 from matplotlib import pyplot as plt
 import random
 import math
 import numpy as np
 from math import exp
+
+#Tamaño gráficos
+plt.style.use('default')
+plt.rcParams['figure.figsize'] = (15, 10)
 
 '''
 Para el metodo de aceptacion y rechazo se debe usar una fY() conocida que tenga el mismo dominio que la fX() que se quiere generar.
