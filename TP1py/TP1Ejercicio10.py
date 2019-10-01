@@ -1,3 +1,11 @@
+#75.26 Simulación - TP1
+#Grupo 5
+#79979 – González, Juan Manuel (juanmg0511@gmail.com)<br />
+#92028 – Tusca, Bautista (bautista.tusca@gmail.com)<br />
+#93272 – Zapico, Rodrigo (rodri.zapico@gmail.com)<br />
+#96749 – Bosch, Martín (martinbosch17@gmail.com)
+
+#Ejercicio 9
 from matplotlib import pyplot as plt
 from scipy.stats import kstest
 from scipy.stats import norm
@@ -11,10 +19,8 @@ from math import exp
 def normal_estandar(t):
     return 2/(np.sqrt(2 * np.pi)) * np.exp( -1*(t)**2 / 2 )
 
-
 def exponencial(t, media=1):
     return media * exp(-1*media*t)
-
 
 media, desvio_estandar = 15, 3
 tam_muestra = 100000
@@ -39,21 +45,7 @@ for i in range(tam_muestra):
         x = desvio_estandar * z + media
         muestra.append(x)
 
-
-print('Aplicamos el test chi2 tomando como H0 que los valores observados en la muestra del ejer 3 siguen'
-      ' una distribucion normal de media 15 y desvio estandar 3'
-      ' Si p < nivel_significancia rechazamos H0 con un error del 1% o %5')
-
+        
 stat, p = kstest(muestra, 'norm', args=(media, desvio_estandar), N=tam_muestra)
 
-print('statistic:', stat, 'p:', p)
-
-if p < 0.05:
-    print("Rechazamos H0 con un error del 5%: los valores de la muestra NO siguen la distribucion normal pedida")
-    print("Ahora probamos si con menos error podemos llegar a aceptar H0")
-    if p < 0.01:
-        print("Rechazamos H0 con un error del 1%: los valores de la muestra NO siguen la distribucion normal pedida")
-    else:
-        print("Aceptamos H0 con un error del 1%: los valores de la muestra siguen la distribucion normal pedida")
-else:
-    print("Aceptamos H0 con un error del 5%: los valores de la muestra siguen la distribucion normal pedida")
+print('Statistic:', stat, 'p:', p)

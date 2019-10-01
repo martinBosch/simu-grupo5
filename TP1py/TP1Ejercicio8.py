@@ -1,3 +1,12 @@
+#75.26 Simulación - TP1
+#Grupo 5
+#79979 – González, Juan Manuel (juanmg0511@gmail.com)<br />
+#92028 – Tusca, Bautista (bautista.tusca@gmail.com)<br />
+#93272 – Zapico, Rodrigo (rodri.zapico@gmail.com)<br />
+#96749 – Bosch, Martín (martinbosch17@gmail.com)
+
+#Ejercicio 8
+
 from matplotlib import pyplot as plt
 import scipy.stats as stats
 
@@ -62,7 +71,6 @@ while not termino:
         esperados.append(nuevaProb)
         i += 1
 
-
 # calculo cantidad de veces que cai 0 afuera, 1 afuera, 2 afuera...
 primero = True
 contador_veces_cae_afuera = 0
@@ -77,33 +85,16 @@ for x in muestras:
     if (x < alfa or x > beta) and not primero:
         contador_veces_cae_afuera += 1
 
-
 # ajusto para que sean frecuencias
 total = sum(veces_cae_afuera.values())
 for k in veces_cae_afuera.keys():
     veces_cae_afuera[k] /= total
-
 
 # lo paso a lista y relleno con 0 donde no tuve apariciones
 observados = []
 for i in range(len(esperados)):
     observados.append(veces_cae_afuera.get(i, 0))
 
-
-print('Aplicamos el test chi2 tomando como H0 que los valores observados del gap test siguen una distribucion geometrica.'
-      ' Si p < nivel_significancia rechazamos H0 con un error del 1% o %5')
-
 Dsquared, p = stats.chisquare(observados, esperados)
 print('D^2:', Dsquared)
 print('p:', p)
-
-
-if p < 0.05:
-    print("Rechazamos H0 con un error del 5%: los valores del gap test NO siguen una distribucion geometrica")
-    print("Ahora probamos si con menos error podemos llegar a aceptar H0")
-    if p < 0.01:
-        print("Rechazamos H0 con un error del 1%: los valores del gap test NO siguen una distribucion geometrica")
-    else:
-        print("Aceptamos H0 con un error del 1%: los valores del gap test siguen una distribucion geometrica")
-else:
-    print("Aceptamos H0 con un error del 5%: los valores del gap test siguen una distribucion geometrica")
