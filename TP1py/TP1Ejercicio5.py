@@ -8,6 +8,8 @@
 #Ejercicio 5
 from matplotlib import pyplot as plt
 import numpy as np
+from scipy.stats import norm
+
 
 #Tamaño gráficos
 plt.style.use('default')

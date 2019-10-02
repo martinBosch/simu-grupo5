@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 from math import exp
 from math import log
 
-from gcl import GCL, GCL01
+from gcl import GCL01
 from constantes import m, a, c, x0
 
 
