@@ -26,7 +26,7 @@ def steady_state_prop(p):
     bQT = numpy.ones(dim)
     return numpy.linalg.solve(QTQ,bQT)
 
-states = 30
+states = 30 #quitar este limite y poner un estado que creamos sea el infinito
 N = 1000 * (1000/10) # 1000 secs == 10000 miliseconds
 P = numpy.loadtxt("respuesta2_matriz.csv", delimiter=",")
 I = numpy.matrix([[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]])
