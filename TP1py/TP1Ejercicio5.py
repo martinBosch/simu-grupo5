@@ -1,6 +1,19 @@
+#75.26 Simulación - TP1
+#Grupo 5
+#79979 – González, Juan Manuel (juanmg0511@gmail.com)<br />
+#92028 – Tusca, Bautista (bautista.tusca@gmail.com)<br />
+#93272 – Zapico, Rodrigo (rodri.zapico@gmail.com)<br />
+#96749 – Bosch, Martín (martinbosch17@gmail.com)
+
+#Ejercicio 5
 from matplotlib import pyplot as plt
 import numpy as np
+from scipy.stats import norm
 
+
+#Tamaño gráficos
+plt.style.use('default')
+plt.rcParams['figure.figsize'] = (15, 10)
 
 tam_muestra = 100000
 
