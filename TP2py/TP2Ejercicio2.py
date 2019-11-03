@@ -2,8 +2,6 @@ import numpy as np
 from random import random
 import matplotlib.pyplot as plt
 
-P = np.array([ [39/40, 1/40], [1/30, 29/30] ])
-
 cantidad_solicitudes = 0
 estados = [cantidad_solicitudes]
 veces_cero_solicitudes = 1
@@ -30,6 +28,7 @@ for i in range(1, N+1):
 
     estados.append(cantidad_solicitudes)
 
+plt.title('Cantidad de solicitudes en cada instante')
 plt.plot(estados)
 plt.show()
 
@@ -37,4 +36,4 @@ plt.xticks(np.arange(0, max(estados), step=1))
 plt.hist(estados, np.arange(0, max(estados), step=1))
 plt.show()
 
-print(veces_cero_solicitudes / N * 100)
+print('Porcentaje de tiempo que el servidor estuvo sin procesar solicitudes:', veces_cero_solicitudes / N * 100, '%')
