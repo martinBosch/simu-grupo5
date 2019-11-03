@@ -1,62 +1,40 @@
-import numpy
-from numpy import linalg
+import numpy as np
+from random import random
 import matplotlib.pyplot as plt
 
-def get_next_state(xt):
-    xtplus1 = 0
+P = np.array([ [39/40, 1/40], [1/30, 29/30] ])
 
-    if (xt == 0):
-        a = numpy.arange(xt, xt+2)
-        xtplus1 = numpy.random.choice(a, p=[39.0/40.0, 1.0/40.0])
-    elif (xt == 29):
-        a = numpy.arange(xt, xt+2)
-        xtplus1 = numpy.random.choice(numpy.arange(xt, xt-2), p=[29.0/30.0, 1.0/30.0])
+cantidad_solicitudes = 0
+estados = [cantidad_solicitudes]
+veces_cero_solicitudes = 1
+
+N = int(1000/0.01)
+for i in range(1, N+1):
+    u = random()
+    if cantidad_solicitudes == 0:
+        if u < 1/40: # ingresa una solicitud
+            cantidad_solicitudes += 1
+        else:
+            veces_cero_solicitudes += 1
     else:
-        a = numpy.arange(xt-1, xt+2)
-        xtplus1 = numpy.random.choice(numpy.arange(xt-1, xt+2), p=[1.0/30.0, 113.0/120.0, 1.0/40.0])
+        prob_no_ingresa_solicitud_y_siga_procesando = (39/40)*(29/30) + (1/40)*(1/30)
+        prob_ingresa_solicitud_y_siga_procesando = (1/40)*(29/30)
+        prob_no_ingresa_solicitud_y_termina_procesar = (39/40)*(1/30)
+        if u < prob_no_ingresa_solicitud_y_termina_procesar: # no ingreso solicitud y termina de procesar
+            cantidad_solicitudes -= 1
+        elif prob_no_ingresa_solicitud_y_termina_procesar <= u < prob_no_ingresa_solicitud_y_termina_procesar+prob_ingresa_solicitud_y_siga_procesando: # ingresa solicitud y sigue procesando
+            cantidad_solicitudes += 1
+        else: # si no ingresa solicitud y sigue procesando o si ingresa solicitud y termino de procesar
+              # la cantidad de solicitudes se mantiene
+            pass
 
-    return xtplus1
+    estados.append(cantidad_solicitudes)
 
-def steady_state_prop(p):
-    dim = p.shape[0]
-    q = (p-numpy.eye(dim))
-    ones = numpy.ones(dim)
-    q = numpy.c_[q,ones]
-    QTQ = numpy.dot(q, q.T)
-    bQT = numpy.ones(dim)
-    return numpy.linalg.solve(QTQ,bQT)
-
-states = 30 #quitar este limite y poner un estado que creamos sea el infinito
-N = 1000 * (1000/10) # 1000 secs == 10000 miliseconds
-P = numpy.loadtxt("respuesta2_matriz.csv", delimiter=",")
-I = numpy.matrix([[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]])
-Pn = numpy.zeros(states, dtype=float)
-
-Pn = I * P
-n = 1
-
-while n <= N:
-    Pn = Pn * P
-    n += 1    
-    
-steady = steady_state_prop(P)
-
-# imprimo porcentaje de tiempo en que el sistema estuvo vacio
-print ('Porcentaje en 0: %.8f%%' % (float(steady[0] * 100)))
-
-states = []
-xn = 0
-
-for i in range(N):
-    xn = get_next_state(xn)
-    states.append(xn)
-
-# ploteo valores en cada momento
-plt.plot(states)
+plt.plot(estados)
 plt.show()
 
-# ploteo histograma
-plt.xticks(numpy.arange(30))
-plt.hist(states, bins=31) 
-plt.title("Cantidad de veces en cada estado cada 10 mseg durante 1000 segundos")
+plt.xticks(np.arange(0, max(estados), step=1))
+plt.hist(estados, np.arange(0, max(estados), step=1))
 plt.show()
+
+print(veces_cero_solicitudes / N * 100)
